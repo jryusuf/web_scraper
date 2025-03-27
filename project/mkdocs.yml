@@ -1,0 +1,116 @@
+# mkdocs.yml
+
+site_name: Job Scraper Design Document
+site_url: https://jryusuf.github.io/web_scraper/ # Replace with your actual GitHub Pages URL
+repo_url: https://github.com/jryusuf/web_scraper/ # Replace with your repo URL
+repo_name: web_scraper # Replace with your repo name
+edit_uri: edit/main/docs/ # Assuming your markdown files are in a 'docs' subfolder and you use the 'main' branch
+
+# Theme Configuration (Using the popular Material for MkDocs theme)
+# Make sure to install it: pip install mkdocs-material
+theme:
+  name: material
+  palette:
+    # Palette toggle for light/dark mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs # Use sections as tabs
+    - navigation.sections # Group pages into sections in the sidebar
+    - navigation.expand # Automatically expand sections with the current page
+    - navigation.top # Back-to-top button
+    - search.suggest # Search suggestions
+    - search.highlight # Highlight search terms
+    - content.code.annotate # Code annotations
+    - content.code.copy # Copy button for code blocks
+
+# Extensions
+markdown_extensions:
+  - pymdownx.highlight: # Code highlighting
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets # Include content from other files
+  - pymdownx.superfences # Better handling of code blocks, needed for Mermaid
+  - admonition # Nicer call-out blocks (note, warning, etc.)
+  - pymdownx.details # Collapsible blocks
+  - footnotes
+  - attr_list # Add attributes (like classes/IDs) to markdown elements
+  - md_in_html # Allow markdown processing inside HTML blocks
+
+# Plugins
+# Make sure to install them: pip install mkdocs-mermaid2-plugin
+plugins:
+  - search:
+      lang: en # Built-in search plugin
+  - mermaid2 # Handles Mermaid diagrams
+      #javascript: js/mermaid.min.js
+      # Arguments: https://github.com/fralau/mkdocs-mermaid2-plugin#arguments
+      #arguments:
+        #theme: 'neutral' # Or 'dark', 'forest', 'default'
+        # themeVariables: # Example for custom theme variables
+        #   primaryColor: '#BB2528'
+        #   primaryTextColor: '#fff'
+        #   primaryBorderColor: '#7C0000'
+        #   lineColor: '#F8B229'
+        #   secondaryColor: '#006100'
+        #   tertiaryColor: '#fff'
+
+markdown_extensions:
+  - pymdownx.superfences:
+      preserve_tabs: true
+      custom_fences:
+        # Mermaid diagrams
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+# Navigation Structure (Replaces the need for a separate _sidebar.md)
+# Assumes your markdown files are located in a 'docs/' subdirectory
+nav:
+  - Introduction:
+    - 'Challenge Overview': introduction/challenge_overview.md
+    - 'Design Goals & Principles': introduction/design_goals.md
+  - Architecture:
+    - 'System Overview': architecture/system_overview.md
+    - 'Technology Stack': architecture/tech_stack.md
+  - Data Ingestion (Scraping):
+    - 'Scraping Strategy':
+      - 'Overview': scraping/strategy.md
+      - 'Website Identification': scraping/website_identification.md
+      - 'Targeting Strategy': scraping/targeting.md
+    - 'Fetching Implementation':
+      - 'Core Fetching (Requests)': scraping/fetching_lightweight.md
+      - 'Dynamic Content (Playwright)': scraping/fetching_dynamic_content.md
+    - 'Handling Challenges':
+      - 'Overview': scraping/challenges.md
+      - 'Rate Limiting': scraping/rate_limiting.md
+      - 'Pagination': scraping/pagination.md
+      - 'Anti-Scraping': scraping/anti_scraping.md
+    - 'Raw Data Storage': scraping/raw_storage.md
+    - 'Scrape Flow': scraping/scrape_flow.md
+  - Components & Workflow:
+    - 'Configuration (Django)': components/configuration.md
+    - 'Dispatcher': components/dispatcher.md
+    - 'Task Queue (Celery)': components/queue.md
+    - 'Scraper Workers': components/workers.md
+    - 'Parsing & Extraction': components/parsing.md
+    - 'Structured Storage (PostgreSQL)': components/structured_storage.md
+  - Data Processing & Analysis:
+    - 'Processing Workflow': processing/workflow.md
+    - 'ML Preparation': processing/ml_prep.md
+    - 'Storage for Analysis/ML': processing/analysis_storage.md
+  - Operations & Scalability:
+    - 'Error Handling & Retries': operations/error_handling.md
+    - 'Monitoring & Alerting': operations/monitoring.md
+    - 'Deployment & Orchestration': operations/orchestration.md
+    - 'Long-Term Efficiency': operations/efficiency.md
+  - Conclusion:
+    - 'Summary': conclusion/summary.md
+    - 'Future Considerations': conclusion/future_improvements.md
