@@ -24,7 +24,7 @@ jobs:
           path: .cache 
           restore-keys: |
             mkdocs-material-
-      - run: pip install mkdocs-material 
+      - run: pip install -r requirements.txt
       - name: publish docs
         working-directory: ./project
         run: mkdocs gh-deploy --force
