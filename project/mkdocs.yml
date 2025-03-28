@@ -74,6 +74,7 @@ markdown_extensions:
 # Navigation Structure (Replaces the need for a separate _sidebar.md)
 # Assumes your markdown files are located in a 'docs/' subdirectory
 nav:
+  - Home: index.md
   - Introduction:
     - 'Challenge Overview': introduction/challenge_overview.md
     - 'Design Goals & Principles': introduction/design_goals.md
