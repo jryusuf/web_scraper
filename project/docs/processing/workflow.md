@@ -13,13 +13,9 @@ graph LR
     C --> D(Fill Obvious Missing Information);
     D --> E(Clean & Format Text Fields);
     E --> F(Structure Specific Fields - Location/Salary);
-    F --> G(Review for Unusual Values - Optional);
-    G --> H(Add Extra Info - Optional Enrichment);
-    H --> I(Final Quality Check);
-    I --> J(Save Cleaned Data);
 
     style A fill:#9cf,stroke:#333,stroke-width:2px
-    style J fill:#9cf,stroke:#333,stroke-width:2px
+    style F fill:#9cf,stroke:#333,stroke-width:2px
 ```
 
 ## Detailed Steps
@@ -42,6 +38,17 @@ Action: For some fields, it might make sense to fill missing values (e.g., mark 
 Goal: Make text consistent and easy to read/process.
 
 Action: Remove extra spaces or leftover HTML code. Ensure consistent capitalization (e.g., make everything lowercase for easier searching, or proper case for display). Fix any text encoding problems.
+
+```mermaid
+graph LR
+    F(Structure Specific Fields - Location/Salary) --> G(Review for Unusual Values - Optional);
+    G --> H(Add Extra Info - Optional Enrichment);
+    H --> I(Final Quality Check);
+    I --> J(Save Cleaned Data);
+
+    style F fill:#9cf,stroke:#333,stroke-width:2px
+    style J fill:#9cf,stroke:#333,stroke-width:2px
+```
 
 ### 5. Parse & Structure Fields
 Goal: Extract detailed information hidden within text fields.
