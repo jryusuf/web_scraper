@@ -32,6 +32,18 @@ Managing the deployment, scaling, and lifecycle of the various system components
 
 ## CI/CD Pipelines
 
+```mermaid
+graph TD
+    A[Push Code to Git] --> B(CI Server Triggered);
+    B --> C(Run Tests);
+    C -- Pass --> D(Build Docker Image);
+    D --> E(Push Image to Registry);
+    E --> F(CD Server Triggered);
+    F --> G(Deploy to Kubernetes);
+
+    C -- Fail --> H(Notify Developer);
+```
+
 *   **Technologies:** GitHub Actions, GitLab CI, Jenkins, CircleCI.
 *   **Purpose:** Automate the process of building container images, running tests (unit, integration), and deploying updated application code and infrastructure changes.
 *   **Typical Workflow:**

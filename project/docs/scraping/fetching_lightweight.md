@@ -8,6 +8,21 @@ For websites or specific endpoints that serve content as static HTML or via pred
 
 ## Key Implementation Features
 
+```mermaid
+graph TD
+    A[Start Fetch Request] --> B{Make HTTP Request};
+    B --> C{Check Response Status};
+    C -- OK (2xx) --> D[Success: Return Response];
+    C -- Retryable Error (e.g., 503, Timeout)? --> E{Retry Count < Max?};
+    E -- Yes --> F[Apply Backoff Delay];
+    F --> B;
+    E -- No --> G[Fail: Raise Exception];
+    C -- Non-Retryable Error (e.g., 404) --> G;
+
+    style D fill:#cfc,stroke:#333,stroke-width:2px
+    style G fill:#fcc,stroke:#333,stroke-width:2px
+```
+
 ### Retry Logic
 
 *   **Mechanism:** Utilize the `urllib3.Retry` mechanism integrated with `requests.Session` or the `backoff` decorator library.

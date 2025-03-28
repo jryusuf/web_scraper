@@ -13,6 +13,51 @@ Effective management of scraping targets, keywords, and settings is crucial for 
 *   **Django Framework:** Chosen primarily for its outstanding **built-in Admin Interface**. This automatically generates a web UI for managing database models, drastically reducing the effort needed to build a configuration tool.
 *   **PostgreSQL Database:** Serves as the backend database storing the configuration data. Chosen for reliability, robustness, and compatibility with Django.
 
+```mermaid
+classDiagram
+    class Website {
+        +int id PK
+        +string name
+        +string base_url
+        +string search_url_template
+        +bool requires_playwright
+        +string pagination_type
+        +bool is_active
+        +float base_delay
+        +json selectors (nullable)
+        +scrape_targets : list~ScrapeTarget~
+    }
+
+    class Keyword {
+        +int id PK
+        +string text
+        +string type (nullable)
+        +scrape_targets : list~ScrapeTarget~
+    }
+
+    class Location {
+        +int id PK
+        +string text
+        +scrape_targets : list~ScrapeTarget~
+    }
+
+    class ScrapeTarget {
+        +int id PK
+        +bool is_active
+        +string frequency
+        +datetime last_scheduled (nullable)
+        +website : Website
+        +keyword : Keyword
+        +location : Location
+        # Represents the specific combination to scrape
+        # Implicit FKs: website_id, keyword_id, location_id
+    }
+
+    Website "1" -- "*" ScrapeTarget : defines >
+    Keyword "1" -- "*" ScrapeTarget : uses >
+    Location "1" -- "*" ScrapeTarget : specifies >
+```
+
 ## Key Data Models (Conceptual)
 
 The Django application would define models roughly corresponding to:

@@ -2,6 +2,19 @@
 
 Many modern job boards rely heavily on JavaScript to load content dynamically, render UI components, handle user interactions, and implement infinite scrolling.
 
+```mermaid
+graph TD
+    A[Start Playwright Task] --> B(Launch Browser);
+    B --> C(Navigate to URL);
+    C --> D{Wait for Content/Selector};
+    D --> E(Perform Interactions?);
+    E -- Yes --> F(Click/Scroll/etc.);
+    F --> D;
+    E -- No --> G(Extract Page Source/Data);
+    G --> H(Close Browser);
+    H --> I[Task Complete];
+```
+
 ## Challenges with Dynamic Content
 
 *   **Data Not in Initial HTML:** Job listings, pagination controls, or filter results might not be present in the initial HTML source returned by a simple HTTP request.

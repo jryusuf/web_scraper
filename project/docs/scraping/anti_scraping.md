@@ -2,6 +2,15 @@
 
 Many websites employ techniques to detect and block automated scraping.
 
+| Technique             | Problem Addressed                  | Solution Mechanism                      |
+| :-------------------- | :--------------------------------- | :-------------------------------------- |
+| User-Agent Rotation   | Default/Repeated UA detection    | Cycle through realistic browser UAs     |
+| Proxy Rotation (IP)   | Source IP blocking/rate limiting | Route requests via different proxy IPs  |
+| Realistic Headers     | Missing/Unusual request headers  | Include standard browser headers        |
+| Delays & Jitter       | Unnatural request timing/rate    | Add pauses/randomness between actions |
+| Browser Automation    | JS Execution/Rendering checks    | Use Playwright/Selenium                 |
+| Fingerprint Masking   | Advanced JS-based detection      | Use stealth plugins/specialized tools |
+
 ## Core Strategies
 
 ### 1. Rotating User-Agents

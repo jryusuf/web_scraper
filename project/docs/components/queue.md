@@ -9,6 +9,42 @@ The Message Queue is the central communication channel decoupling the Dispatcher
 *   Enhances system resilience: If workers are down, messages wait in the queue. If the dispatcher is down, workers continue processing existing messages.
 *   Enables independent scaling of Dispatcher and Workers.
 
+```mermaid
+sequenceDiagram
+    participant D as Dispatcher
+    participant Q as Message Queue Broker
+    participant W as Celery Worker
+
+    Note over D, W: Worker is idle, waiting for jobs.
+
+    D->>+Q: Publish(Job Message)
+    Note over Q: Message stored persistently.
+    Q-->>-D: Publish Acknowledged (Optional)
+
+    Note over Q, W: Broker makes message available.
+    W->>+Q: Consume()/Get Message
+    Note over Q: Message marked as "unacknowledged".
+    Q-->>-W: Job Message
+
+    Note over W: Worker begins processing job...
+    W->>W: Execute Scraping Task (Fetch, Parse etc.)
+
+    alt Task Successful
+        Note over W: Job completed successfully.
+        W->>+Q: Acknowledge(Message)
+        Note over Q: Message permanently removed.
+        Q-->>-W: Ack Confirmed (Optional)
+    else Task Failed (After Retries)
+        Note over W: Job failed after all retries.
+        W->>+Q: Negative Acknowledge / Route to DLQ
+        Note over Q: Message moved to Dead-Letter Queue or discarded.
+        Q-->>-W: Nack/Route Confirmed (Optional)
+    else Worker Crashes Mid-Task
+        Note over W: Worker crashes before acknowledging.
+        Note over Q: Message remains "unacknowledged".<br/>After visibility timeout,<br/>Broker makes message available again<br/>for another worker.
+    end
+```
+
 ## Technology Choices
 
 *   **RabbitMQ:** Feature-rich, mature, protocol-based (AMQP) message broker. Offers routing flexibility, acknowledgements, persistence, and DLQ support. Requires separate deployment and management.

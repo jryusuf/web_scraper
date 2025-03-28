@@ -2,6 +2,21 @@
 
 Respecting website resources and avoiding rate limits is crucial for ethical and sustainable scraping.
 
+```mermaid
+graph TD
+    A[Receive HTTP Response] --> B{Check Status Code};
+    B -- OK (2xx) --> C[Process Response];
+    B -- Rate Limit (429)? --> D{Retry Logic};
+    D -- Try Again After Backoff --> E[Re-queue Request/Retry];
+    D -- Max Retries Reached --> F[Log Error / Mark Job Failed];
+    B -- Server Error (5xx)? --> D;
+    B -- Other Client Error (4xx)? --> F;
+    B -- Redirect (3xx)? --> G[Handle Redirect];
+
+    style C fill:#cfc,stroke:#333,stroke-width:2px
+    style F fill:#fcc,stroke:#333,stroke-width:2px
+```
+
 ## Politeness Delays
 
 *   **Mechanism:** Introduce artificial delays between consecutive requests to the same domain.

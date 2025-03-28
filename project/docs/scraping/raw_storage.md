@@ -2,6 +2,14 @@
 
 Storing the raw, unprocessed HTML content fetched from target websites is a crucial step for resilience and decoupling.
 
+```mermaid
+graph TD
+    A[Worker Fetches HTML] --> B(Compress Content);
+    B --> C(Construct S3 Path/Filename);
+    C --> D[Upload to S3 Bucket];
+    D --> E(Log S3 Path);
+```
+
 ## Storage Choice: Cloud Object Storage
 
 *   **Technology:** AWS S3, Google Cloud Storage (GCS), Azure Blob Storage.

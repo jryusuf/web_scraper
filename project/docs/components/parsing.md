@@ -22,6 +22,22 @@ Once raw HTML content is successfully fetched and stored, it needs to be parsed 
 
 ### Option A: Dedicated Parsing Workers (Celery)
 
+```mermaid
+graph TD
+    A(Receive Parsing Job Message S3 Path) --> B(Download HTML from S3);
+    B --> C(Decompress HTML);
+    C --> D(Parse HTML);
+    D --> E(Extract & Clean Fields);
+    E --> F(Standardize Data);
+    F --> G{Validate Data Quality};
+    G -- OK --> H[Insert/Update Structured DB];
+    H --> I[Acknowledge Queue Message];
+    G -- Failed --> J[Log Validation Error];
+    J --> I;
+
+    style I fill:#cfc,stroke:#333,stroke-width:2px
+```
+
 *   **Workflow:**
     1.  Scraper worker successfully fetches HTML and uploads to S3.
     2.  Scraper worker (or an S3 event trigger) publishes a "parsing job" message to a *separate* Message Queue, including the S3 path of the raw HTML.
@@ -31,6 +47,7 @@ Once raw HTML content is successfully fetched and stored, it needs to be parsed 
 *   **Cons:** Requires an additional queue and message flow.
 
 ### Option B: Serverless Functions (e.g., AWS Lambda)
+
 
 *   **Workflow:**
     1.  Scraper worker uploads raw HTML to S3.

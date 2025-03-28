@@ -2,6 +2,25 @@
 
 The Dispatcher acts as the brain coordinating the scraping activities based on the central configuration.
 
+```mermaid
+sequenceDiagram
+    participant S as Scheduler
+    participant D as Dispatcher
+    participant C as Config DB
+    participant Q as Message Queue
+
+    loop Check Schedule
+        S->>D: Trigger Dispatch Check
+        D->>C: Query Due ScrapeTargets
+        C-->>D: Return Due Targets
+        alt For Each Due Target
+            D->>D: Construct Job Message
+            D->>Q: Publish Job Message
+            D->>C: Update last_scheduled
+        end
+    end
+```
+
 ## Role & Purpose
 
 *   Periodically queries the Configuration Database (Django/PostgreSQL) to identify active `ScrapeTarget` combinations that are due for execution based on their defined `frequency` and `last_scheduled` time.

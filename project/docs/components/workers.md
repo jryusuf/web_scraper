@@ -2,6 +2,24 @@
 
 The Workers are the core execution units responsible for performing the actual web scraping tasks.
 
+```mermaid
+graph TD
+    A[Receive Job Message] --> B{Parse Message};
+    B --> C{Requires Playwright?};
+    C -- Yes --> D[Run Playwright Fetch Logic];
+    C -- No --> E[Run Requests Fetch Logic];
+    D --> F{Fetch Success?};
+    E --> F;
+    F -- Yes --> G[Compress HTML];
+    G --> H[Upload HTML to S3];
+    H --> I[Log Success / Report Stats];
+    I --> J[Acknowledge Queue Message];
+    F -- No (After Retries) --> K[Log Error / Report Stats];
+    K --> J;
+
+    style J fill:#cfc,stroke:#333,stroke-width:2px
+```
+
 ## Role & Purpose
 
 *   Consume job messages from the Message Queue.

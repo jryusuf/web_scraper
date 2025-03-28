@@ -1,19 +1,32 @@
-# Storage for Analysis & ML
+# Where to Store Data for Analysis
 
-While the primary PostgreSQL database holds the cleaned structured data, its suitability as the *sole* storage layer for advanced analysis and large-scale Machine Learning needs consideration. Different storage solutions cater better to specific workloads.
+The primary PostgreSQL database holds the cleaned, structured job data. While excellent for many tasks, different storage systems might be better suited for very large-scale analysis or specific types of processing.
 
-## Role of PostgreSQL (Primary Structured Store)
+## PostgreSQL: The Primary Clean Data Store
 
-*   **Strengths:**
-    *   Excellent for operational queries, data integrity, and serving data to applications.
-    *   Powerful SQL for complex relational queries, filtering, and joining.
-    *   Supports moderate-scale analytics and reporting, especially when well-indexed.
-    *   Can serve as the direct source for pulling data into Python environments (Pandas/Dask/Spark) for ML model training.
-    *   `JSONB` allows flexible querying of semi-structured data.
-*   **Limitations (at very large scale or for specific workloads):**
-    *   **OLAP Performance:** Row-based storage is generally less performant for large-scale analytical aggregations (OLAP) compared to columnar stores. Complex analytical queries over billions of rows might become slow.
-    *   **ML Training Data Source:** Repeatedly pulling very large datasets for ML training can put significant load on the operational database.
-    *   **Separation of Workloads:** Running heavy analytical queries or ML data extraction jobs can interfere with the performance of operational tasks (data insertion/updates).
+*   **Role:** Main repository for reliable, up-to-date, structured job information.
+*   **Good For:**
+    *   Serving data to applications or dashboards.
+    *   Running standard SQL queries for reports.
+    *   Providing data for smaller-scale analysis or ML model building (by querying and loading data into tools like Python/Pandas).
+*   **Potential Limits:** May become slower for extremely complex analytical queries over huge amounts of historical data, or if heavy analysis interferes with ongoing data collection.
+
+## Considering Other Options for Scale
+
+As data volume grows or analysis needs become more intensive, these specialized systems might be added *alongside* PostgreSQL:
+
+```mermaid
+graph TD
+    A(PostgreSQL Clean Data) -->|Option 1: For Fast Reporting| B(Data Warehouse);
+    A -->|Option 2: For Bulk Processing / ML| C(Data Lake);
+
+    B --> D{BI Tools / SQL Analytics};
+    C --> E{ML Training / Big Data Processing};
+
+    style A fill:#9cf,stroke:#333,stroke-width:2px
+    style B fill:#f9d,stroke:#333,stroke-width:2px
+    style C fill:#ccf,stroke:#333,stroke-width:2px
+```
 
 ## Alternative/Complementary Storage Solutions
 
